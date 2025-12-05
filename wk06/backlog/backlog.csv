@@ -2,10 +2,13 @@ id,title,story_ref,story_type,need,type,severity,inclusion_risk,evidence,notes,c
 1,Filter resets on reload,stories.md#S1,Job story,Reduce cognitive load,Usability,Medium,"Cognitive,Motor",P-A notes Q1,"Current implementation loses state on PRG redirect",false
 2,No explicit confirmation in no-JS mode,stories.md#S2,Job story,Trust & feedback,Accessibility,High,"Cognitive,SR,Low digital literacy",P-A notes Q2,"HTMX has live region, but no-JS redirect has no feedback message",true
 3,Keyboard tab order inefficient for delete,stories.md#S3,Job story,Efficiency,Accessibility,Medium,"Motor,Keyboard",P-A notes Q3,"Tabbing through list takes too long; need better focus management or grouping",false
-4,Button text contrast too low,stories.md#S4,Job story,Visibility,Accessibility,High,"Low vision,Situational",P-B notes Q1; WCAG 1.4.3,"Default gray text on white button is < 4.5:1",true
+4,Button text contrast too low,stories.md#S4,Job story,Visibility,Accessibility,High,"Low vision,Situational","P-B notes Q1; WCAG 1.4.3; wk07/audit/axe-report.md","Button text #6c757d has insufficient contrast against Pico primary background (#0172ad)",true
 5,Silent validation error,stories.md#S5,Job story,Error recovery,Accessibility,High,"SR,Cognitive",P-B notes Q2; WCAG 3.3.1,"Invalid submit just redirects or does nothing visible for SR",true
 6,Priority input missing label,Internal Audit,WCAG violation,Labeling,Accessibility,High,"SR,Cognitive",axe scan; WCAG 1.3.1,"Input field has no associated label element",true
-7,Icon image missing alt text,Internal Audit,WCAG violation,Non-text content,Accessibility,Medium,SR,axe scan; WCAG 1.1.1,"Decorative or meaningful icon needs alt tag",true
-8,Empty link in footer,Internal Audit,WCAG violation,Link purpose,Accessibility,Low,SR,axe scan; WCAG 2.4.4,"Link with no text is confusing for SR users",false
+7,Icon image missing alt text,Internal Audit,WCAG violation,Non-text content,Accessibility,Medium,SR,"axe scan; WCAG 1.1.1; wk07/audit/axe-report.md","Decorative or meaningful icon needs alt tag",true
+8,Empty link in footer,Internal Audit,WCAG violation,Link purpose,Accessibility,Low,SR,"axe scan; WCAG 2.4.4; wk07/audit/axe-report.md","Link with no text is confusing for SR users",false
 9,Pagination missing for long lists,stories.md#S6,Job story,Info management,Usability,Low,"Cognitive,Motor",P-B notes Q3,"Nice to have for Week 8",false
+10,Delete has no confirmation dialog,wk07/audit/heuristics.md#user-control-and-freedom,Heuristic violation,Error prevention,Usability,Medium,"Motor,Cognitive","Heuristic H3/H5: accidental delete cannot be cancelled","Consider adding a confirmation step before delete",false
+11,No undo for delete,wk07/audit/heuristics.md#user-control-and-freedom,Heuristic violation,User control,Usability,Low,"Motor,Cognitive","Heuristic H3: users cannot recover from mistaken delete","Out of scope for Week 7; candidate for later redesign",false
+12,No in-app help or documentation,wk07/audit/heuristics.md#help-and-documentation,Heuristic violation,Learning support,Usability,Low,"Cognitive,Low digital literacy","No dedicated help page or tips for using keyboard/AT","Add simple help section or link in footer",false
 

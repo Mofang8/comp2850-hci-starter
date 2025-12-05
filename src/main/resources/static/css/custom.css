@@ -257,10 +257,10 @@ select:focus {
    (For Week 7 Lab 2 audit exercise)
    ======================================== */
 
-/* Issue: Button color contrast fails WCAG 1.4.3 (AA)
-   Color #6c757d on white background = 4.2:1 contrast (needs 4.5:1)
-   Students will discover this with axe DevTools and fix in Week 7 Lab 2 */
+/* Issue (fixed): Button color contrast failed WCAG 1.4.3 (AA)
+   Previously: #6c757d text on Pico primary background (#0172ad) ≈ 1.11:1
+   Fix: Use white text on primary background to meet contrast requirements */
 button[type="submit"],
 button {
-  color: #6c757d;
+  color: #ffffff;
 }
