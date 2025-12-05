@@ -2,6 +2,7 @@ package data
 
 import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
+import utils.Page
 
 /**
  * NOTE FOR NON-INTELLIJ IDEs (VSCode, Eclipse, etc.):
@@ -72,6 +73,53 @@ object TaskRepository {
     }
 
     fun all(): List<Task> = tasks.toList()
+
+    /**
+     * Search tasks by title and return a paged result.
+     *
+     * @param query Free-text query matched against the task title (case-insensitive).
+     * @param page 1-based page index (will be clamped to valid range).
+     * @param size Page size (minimum 1).
+     */
+    fun search(
+        query: String,
+        page: Int,
+        size: Int,
+    ): Page<Task> {
+        val trimmedQuery = query.trim()
+        val allTasks = tasks.toList()
+
+        val filtered =
+            if (trimmedQuery.isBlank()) {
+                allTasks
+            } else {
+                allTasks.filter { task ->
+                    task.title.contains(trimmedQuery, ignoreCase = true)
+                }
+            }
+
+        val pageSize = size.coerceAtLeast(1)
+        val totalItems = filtered.size
+        val totalPages = if (totalItems == 0) 1 else ((totalItems + pageSize - 1) / pageSize)
+
+        val currentPage = page.coerceIn(1, totalPages)
+        val fromIndex = ((currentPage - 1) * pageSize).coerceAtMost(totalItems)
+        val toIndex = (fromIndex + pageSize).coerceAtMost(totalItems)
+
+        val items =
+            if (fromIndex >= toIndex) {
+                emptyList()
+            } else {
+                filtered.subList(fromIndex, toIndex)
+            }
+
+        return Page(
+            items = items,
+            currentPage = currentPage,
+            pageSize = pageSize,
+            totalItems = totalItems,
+        )
+    }
 
     fun add(title: String): Task {
         val task = Task(idCounter.getAndIncrement(), title)

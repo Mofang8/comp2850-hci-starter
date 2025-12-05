@@ -8,6 +8,9 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.pebbletemplates.pebble.PebbleEngine
 import java.io.StringWriter
+import utils.Page
+import isHtmxRequest
+import renderTemplate
 
 /**
  * NOTE FOR NON-INTELLIJ IDEs (VSCode, Eclipse, etc.):
@@ -56,24 +59,47 @@ fun Route.taskRoutes() {
             ).build()
 
     /**
-     * Helper: Check if request is from HTMX
-     */
-    fun ApplicationCall.isHtmx(): Boolean = request.headers["HX-Request"]?.equals("true", ignoreCase = true) == true
-
-    /**
-     * GET /tasks - List all tasks
-     * Returns full page (no HTMX differentiation in Week 6)
+     * GET /tasks - List tasks with optional filtering and pagination.
      */
     get("/tasks") {
+        val query = call.request.queryParameters["q"].orEmpty()
+        val pageParam = call.request.queryParameters["page"]?.toIntOrNull() ?: 1
+        val pageSize = 10
+
+        val page: Page<data.Task> = TaskRepository.search(query = query, page = pageParam, size = pageSize)
+
         val model =
             mapOf(
                 "title" to "Tasks",
-                "tasks" to TaskRepository.all(),
+                "page" to page,
+                "query" to query,
             )
-        val template = pebble.getTemplate("tasks/index.peb")
-        val writer = StringWriter()
-        template.evaluate(writer, model)
-        call.respondText(writer.toString(), ContentType.Text.Html)
+
+        val html = call.renderTemplate("tasks/index.peb", model)
+        call.respondText(html, ContentType.Text.Html)
+    }
+
+    /**
+     * GET /tasks/fragment - Return list + pager fragments for HTMX.
+     */
+    get("/tasks/fragment") {
+        val query = call.request.queryParameters["q"].orEmpty()
+        val pageParam = call.request.queryParameters["page"]?.toIntOrNull() ?: 1
+        val pageSize = 10
+
+        val page: Page<data.Task> = TaskRepository.search(query = query, page = pageParam, size = pageSize)
+
+        val fragmentModel =
+            mapOf(
+                "page" to page,
+                "query" to query,
+            )
+
+        val listHtml = call.renderTemplate("tasks/_list.peb", fragmentModel)
+        val pagerHtml = call.renderTemplate("tasks/_pager.peb", fragmentModel)
+        val statusHtml = """<div id="status" hx-swap-oob="true">Found ${page.totalItems} tasks.</div>"""
+
+        call.respondText(listHtml + pagerHtml + statusHtml, ContentType.Text.Html)
     }
 
     /**
@@ -85,10 +111,13 @@ fun Route.taskRoutes() {
 
         if (title.isBlank()) {
             // Validation error handling
-            if (call.isHtmx()) {
-                val error = """<div id="status" hx-swap-oob="true" role="alert" aria-live="assertive">
-                    Title is required. Please enter at least one character.
-                </div>"""
+            if (call.isHtmxRequest()) {
+                val error =
+                    """
+                    <div id="status" hx-swap-oob="true" role="alert" aria-live="assertive">
+                        Title is required. Please enter at least one character.
+                    </div>
+                    """.trimIndent()
                 return@post call.respondText(error, ContentType.Text.Html, HttpStatusCode.BadRequest)
             } else {
                 // No-JS: redirect back (could add error query param)
@@ -97,23 +126,29 @@ fun Route.taskRoutes() {
             }
         }
 
-        val task = TaskRepository.add(title)
+        TaskRepository.add(title)
 
-        if (call.isHtmx()) {
-            // Return HTML fragment for new task
-            val fragment = """<li id="task-${task.id}">
-                <span>${task.title}</span>
-                <form action="/tasks/${task.id}/delete" method="post" style="display: inline;"
-                      hx-post="/tasks/${task.id}/delete"
-                      hx-target="#task-${task.id}"
-                      hx-swap="outerHTML">
-                  <button type="submit" aria-label="Delete task: ${task.title}">Delete</button>
-                </form>
-            </li>"""
+        if (call.isHtmxRequest()) {
+            // After adding, re-render the current page of results into the task area.
+            val query = call.request.queryParameters["q"].orEmpty()
+            val page: Page<data.Task> = TaskRepository.search(query = query, page = 1, size = 10)
 
-            val status = """<div id="status" hx-swap-oob="true">Task "${task.title}" added successfully.</div>"""
+            val fragmentModel =
+                mapOf(
+                    "page" to page,
+                    "query" to query,
+                )
 
-            return@post call.respondText(fragment + status, ContentType.Text.Html, HttpStatusCode.Created)
+            val listHtml = call.renderTemplate("tasks/_list.peb", fragmentModel)
+            val pagerHtml = call.renderTemplate("tasks/_pager.peb", fragmentModel)
+            val statusHtml =
+                """
+                <div id="status" hx-swap-oob="true">
+                    Task added successfully.
+                </div>
+                """.trimIndent()
+
+            return@post call.respondText(listHtml + pagerHtml + statusHtml, ContentType.Text.Html)
         }
 
         // No-JS: POST-Redirect-GET pattern (303 See Other)
@@ -129,7 +164,7 @@ fun Route.taskRoutes() {
         val id = call.parameters["id"]?.toIntOrNull()
         val removed = id?.let { TaskRepository.delete(it) } ?: false
 
-        if (call.isHtmx()) {
+        if (call.isHtmxRequest()) {
             val message = if (removed) "Task deleted." else "Could not delete task."
             val status = """<div id="status" hx-swap-oob="true">$message</div>"""
             // Return empty content to trigger outerHTML swap (removes the <li>)
@@ -154,23 +189,36 @@ fun Route.taskRoutes() {
             else -> null
         }
 
-        if (call.isHtmx()) {
+        if (call.isHtmxRequest()) {
             val template = pebble.getTemplate("tasks/partials/edit.peb")
             val model = mapOf("task" to task, "error" to errorMessage)
             val writer = StringWriter()
             template.evaluate(writer, model)
             call.respondText(writer.toString(), ContentType.Text.Html)
         } else {
-            val model = mapOf(
-                "title" to "Tasks",
-                "tasks" to TaskRepository.all(),
-                "editingId" to id,
-                "errorMessage" to errorMessage
-            )
-            val template = pebble.getTemplate("tasks/index.peb")
-            val writer = StringWriter()
-            template.evaluate(writer, model)
-            call.respondText(writer.toString(), ContentType.Text.Html)
+            // No-JS: render full page with the selected task in edit mode.
+            val allTasks = TaskRepository.all()
+            val page =
+                Page(
+                    items = allTasks,
+                    currentPage = 1,
+                    pageSize = allTasks.size.coerceAtLeast(1),
+                    totalItems = allTasks.size,
+                )
+
+            val model =
+                mutableMapOf<String, Any>(
+                    "title" to "Tasks",
+                    "page" to page,
+                    "editingId" to id,
+                ).apply {
+                    if (errorMessage != null) {
+                        this["errorMessage"] = errorMessage
+                    }
+                }
+
+            val html = call.renderTemplate("tasks/index.peb", model)
+            call.respondText(html, ContentType.Text.Html)
         }
     }
 
@@ -184,16 +232,16 @@ fun Route.taskRoutes() {
         val newTitle = call.receiveParameters()["title"].orEmpty().trim()
 
         if (newTitle.isBlank()) {
-            if (call.isHtmx()) {
-                val template = pebble.getTemplate("tasks/partials/edit.peb")
-                val model =
-                    mapOf(
-                        "task" to task,
-                        "error" to "Title is required. Please enter at least one character.",
+            if (call.isHtmxRequest()) {
+                val html =
+                    call.renderTemplate(
+                        "tasks/partials/edit.peb",
+                        mapOf(
+                            "task" to task,
+                            "error" to "Title is required. Please enter at least one character.",
+                        ),
                     )
-                val writer = StringWriter()
-                template.evaluate(writer, model)
-                return@post call.respondText(writer.toString(), ContentType.Text.Html)
+                return@post call.respondText(html, ContentType.Text.Html)
             } else {
                 call.response.headers.append("Location", "/tasks/${id}/edit?error=blank")
                 return@post call.respond(HttpStatusCode.SeeOther)
@@ -203,14 +251,13 @@ fun Route.taskRoutes() {
         task.title = newTitle
         TaskRepository.update(task)
 
-        if (call.isHtmx()) {
-            val viewTemplate = pebble.getTemplate("tasks/partials/view.peb")
-            val viewWriter = StringWriter()
-            viewTemplate.evaluate(viewWriter, mapOf("task" to task))
+        if (call.isHtmxRequest()) {
+            val viewHtml = call.renderTemplate("tasks/partials/view.peb", mapOf("task" to task))
 
-            val status = """<div id="status" hx-swap-oob="true">Task "${task.title}" updated successfully.</div>"""
+            val status =
+                """<div id="status" hx-swap-oob="true">Task "${task.title}" updated successfully.</div>"""
 
-            return@post call.respondText(viewWriter.toString() + status, ContentType.Text.Html)
+            return@post call.respondText(viewHtml + status, ContentType.Text.Html)
         }
 
         call.response.headers.append("Location", "/tasks")
@@ -224,10 +271,7 @@ fun Route.taskRoutes() {
         val id = call.parameters["id"]?.toIntOrNull() ?: return@get call.respond(HttpStatusCode.NotFound)
         val task = TaskRepository.find(id) ?: return@get call.respond(HttpStatusCode.NotFound)
 
-        val template = pebble.getTemplate("tasks/partials/view.peb")
-        val model = mapOf("task" to task)
-        val writer = StringWriter()
-        template.evaluate(writer, model)
-        call.respondText(writer.toString(), ContentType.Text.Html)
+        val html = call.renderTemplate("tasks/partials/view.peb", mapOf("task" to task))
+        call.respondText(html, ContentType.Text.Html)
     }
 }
