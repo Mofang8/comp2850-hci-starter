@@ -4,3 +4,9 @@
 /out/
 .claude/
 COMPILATION-ISSUES.md
+
+# Week 7 Data Privacy
+/data/tasks.csv
+/data/metrics.csv
+/wk*/research/*notes.md
+*.log
