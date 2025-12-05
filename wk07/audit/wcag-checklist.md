@@ -2,7 +2,7 @@
 
 **Date**: 2025-11-30  
 **Scope**: Task manager (`/tasks` — add, inline edit, delete)  
-**Tester**: [Your Name]
+**Tester**: [Tianqi Wang]
 
 ---
 
