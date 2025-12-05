@@ -1,6 +1,6 @@
 # Heuristic Evaluation — Week 7
 
-**Evaluator**: [Your Name]  
+**Evaluator**: [Tianqi Wang]  
 **Date**: 2025-11-30  
 **Method**: Nielsen’s 10 Usability Heuristics + Shneiderman’s Golden Rules
 
