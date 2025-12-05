@@ -1,1 +1,3 @@
 id,title,story_ref,story_type,need,type,severity,inclusion_risk,evidence,notes,candidate_fix
+wk8-01,No-JS delete has no confirmation,,tradeoff,risk,functionality,high,medium,,"No confirmation dialog when JavaScript is disabled – accidental deletes are harder to recover from.",Add optional confirmation page or soft-delete with undo window
+wk8-02,Limited feedback for no-JS filtering,,tradeoff,ux,medium,low,,"Filter changes rely on full page reload and text result count only.",Consider stronger visual emphasis or summary panel for filtered state

@@ -60,6 +60,10 @@ fun Route.taskRoutes() {
 
     /**
      * GET /tasks - List tasks with optional filtering and pagination.
+     *
+     * Also reads any validation error query params for the no-JS path:
+     * - error: which field has an error (e.g., "title")
+     * - msg: optional error code (e.g., "too_long")
      */
     get("/tasks") {
         val query = call.request.queryParameters["q"].orEmpty()
@@ -68,11 +72,18 @@ fun Route.taskRoutes() {
 
         val page: Page<data.Task> = TaskRepository.search(query = query, page = pageParam, size = pageSize)
 
+        val error = call.request.queryParameters["error"]
+        val msg = call.request.queryParameters["msg"]
+        val titleValue = call.request.queryParameters["title"].orEmpty()
+
         val model =
             mapOf(
                 "title" to "Tasks",
                 "page" to page,
                 "query" to query,
+                "error" to (error ?: ""),
+                "msg" to (msg ?: ""),
+                "titleValue" to titleValue,
             )
 
         val html = call.renderTemplate("tasks/index.peb", model)
@@ -97,7 +108,15 @@ fun Route.taskRoutes() {
 
         val listHtml = call.renderTemplate("tasks/_list.peb", fragmentModel)
         val pagerHtml = call.renderTemplate("tasks/_pager.peb", fragmentModel)
-        val statusHtml = """<div id="status" hx-swap-oob="true">Found ${page.totalItems} tasks.</div>"""
+        val statusHtml =
+            """
+            <div id="status"
+                 hx-swap-oob="true"
+                 role="status"
+                 aria-live="polite">
+                Found ${page.totalItems} tasks.
+            </div>
+            """.trimIndent()
 
         call.respondText(listHtml + pagerHtml + statusHtml, ContentType.Text.Html)
     }
@@ -109,19 +128,57 @@ fun Route.taskRoutes() {
     post("/tasks") {
         val title = call.receiveParameters()["title"].orEmpty().trim()
 
+        // Server-side validation: always validate on server for both HTMX and no-JS paths.
         if (title.isBlank()) {
-            // Validation error handling
             if (call.isHtmxRequest()) {
-                val error =
+                // HTMX error path: keep task list + pager visible, update status via OOB.
+                val query = call.request.queryParameters["q"].orEmpty()
+                val page: Page<data.Task> = TaskRepository.search(query = query, page = 1, size = 10)
+                val fragmentModel =
+                    mapOf(
+                        "page" to page,
+                        "query" to query,
+                    )
+                val listHtml = call.renderTemplate("tasks/_list.peb", fragmentModel)
+                val pagerHtml = call.renderTemplate("tasks/_pager.peb", fragmentModel)
+
+                val errorHtml =
                     """
-                    <div id="status" hx-swap-oob="true" role="alert" aria-live="assertive">
+                    <div id="status" hx-swap-oob="true" role="alert" aria-live="assertive" class="error">
                         Title is required. Please enter at least one character.
                     </div>
                     """.trimIndent()
-                return@post call.respondText(error, ContentType.Text.Html, HttpStatusCode.BadRequest)
+                return@post call.respondText(listHtml + pagerHtml + errorHtml, ContentType.Text.Html, HttpStatusCode.BadRequest)
             } else {
-                // No-JS: redirect back (could add error query param)
-                call.response.headers.append("Location", "/tasks")
+                // No-JS: redirect with error query param so full page can show accessible summary.
+                val redirectUrl = "/tasks?error=title&title=${title.encodeURLParameter()}"
+                call.response.headers.append("Location", redirectUrl)
+                return@post call.respond(HttpStatusCode.SeeOther)
+            }
+        }
+
+        if (title.length > 200) {
+            if (call.isHtmxRequest()) {
+                val query = call.request.queryParameters["q"].orEmpty()
+                val page: Page<data.Task> = TaskRepository.search(query = query, page = 1, size = 10)
+                val fragmentModel =
+                    mapOf(
+                        "page" to page,
+                        "query" to query,
+                    )
+                val listHtml = call.renderTemplate("tasks/_list.peb", fragmentModel)
+                val pagerHtml = call.renderTemplate("tasks/_pager.peb", fragmentModel)
+
+                val errorHtml =
+                    """
+                    <div id="status" hx-swap-oob="true" role="alert" aria-live="assertive" class="error">
+                        Title is too long (maximum 200 characters).
+                    </div>
+                    """.trimIndent()
+                return@post call.respondText(listHtml + pagerHtml + errorHtml, ContentType.Text.Html, HttpStatusCode.BadRequest)
+            } else {
+                val redirectUrl = "/tasks?error=title&msg=too_long&title=${title.encodeURLParameter()}"
+                call.response.headers.append("Location", redirectUrl)
                 return@post call.respond(HttpStatusCode.SeeOther)
             }
         }
@@ -143,7 +200,10 @@ fun Route.taskRoutes() {
             val pagerHtml = call.renderTemplate("tasks/_pager.peb", fragmentModel)
             val statusHtml =
                 """
-                <div id="status" hx-swap-oob="true">
+                <div id="status"
+                     hx-swap-oob="true"
+                     role="status"
+                     aria-live="polite">
                     Task added successfully.
                 </div>
                 """.trimIndent()
@@ -157,21 +217,48 @@ fun Route.taskRoutes() {
     }
 
     /**
-     * POST /tasks/{id}/delete - Delete task
-     * Dual-mode: HTMX empty response or PRG redirect
+     * DELETE /tasks/{id} - Delete task (HTMX path)
+     *
+     * Used by hx-delete on the Delete button. Returns only an OOB status message,
+     * relying on outerHTML swap on the <li> to remove the task from the DOM.
+     */
+    delete("/tasks/{id}") {
+        val id = call.parameters["id"]?.toIntOrNull() ?: return@delete call.respond(HttpStatusCode.BadRequest)
+        val task = TaskRepository.find(id)
+        val removed = TaskRepository.delete(id)
+
+        val message =
+            if (removed) {
+                """Deleted "${task?.title ?: "task"}"."""
+            } else {
+                "Could not delete task."
+            }
+
+        val status =
+            """
+            <div id="status"
+                 hx-swap-oob="true"
+                 role="status"
+                 aria-live="polite">
+                $message
+            </div>
+            """.trimIndent()
+
+        // Empty body for the element itself; OOB status updates the live region.
+        call.respondText(status, ContentType.Text.Html)
+    }
+
+    /**
+     * POST /tasks/{id}/delete - Delete task (no-JS fallback)
+     *
+     * HTML form posts here when JavaScript is disabled.
      */
     post("/tasks/{id}/delete") {
         val id = call.parameters["id"]?.toIntOrNull()
         val removed = id?.let { TaskRepository.delete(it) } ?: false
 
-        if (call.isHtmxRequest()) {
-            val message = if (removed) "Task deleted." else "Could not delete task."
-            val status = """<div id="status" hx-swap-oob="true">$message</div>"""
-            // Return empty content to trigger outerHTML swap (removes the <li>)
-            return@post call.respondText(status, ContentType.Text.Html)
-        }
-
-        // No-JS: POST-Redirect-GET pattern (303 See Other)
+        // For now we accept that there is no confirmation in no-JS mode (documented trade-off).
+        // POST-Redirect-GET pattern (303 See Other)
         call.response.headers.append("Location", "/tasks")
         call.respond(HttpStatusCode.SeeOther)
     }
@@ -255,7 +342,14 @@ fun Route.taskRoutes() {
             val viewHtml = call.renderTemplate("tasks/partials/view.peb", mapOf("task" to task))
 
             val status =
-                """<div id="status" hx-swap-oob="true">Task "${task.title}" updated successfully.</div>"""
+                """
+                <div id="status"
+                     hx-swap-oob="true"
+                     role="status"
+                     aria-live="polite">
+                    Task "${task.title}" updated successfully.
+                </div>
+                """.trimIndent()
 
             return@post call.respondText(viewHtml + status, ContentType.Text.Html)
         }
