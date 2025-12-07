@@ -1,0 +1,29 @@
+category,check,htmx_mode,nojs_mode,notes
+Keyboard,All interactive elements reachable with Tab,pass,pass,Verified all buttons/inputs/links accessible
+Keyboard,Focus order matches visual order,pass,pass,Top-to-bottom left-to-right
+Keyboard,Focus indicators visible on all elements,pass,pass,3px blue outline on all focusable elements
+Keyboard,No keyboard traps,pass,pass,Can Tab out of all elements
+Keyboard,Skip link functional,pass,pass,Skip to main content works
+Screen Reader,All form labels announced,pass,pass,Label for= matches input id
+Screen Reader,Error messages announced (role=alert),pass,pass,NVDA announces immediately
+Screen Reader,Success messages announced (role=status),pass,pass,NVDA announces politely
+Screen Reader,Live regions working,pass,pass,Filter count and status updates announced
+Screen Reader,Headings navigable (H key),pass,pass,h1 Tasks and h2 sections navigable
+Forms,Errors identified in text,pass,pass,Clear error message with link to field
+Forms,Errors linked to inputs (aria-describedby),pass,pass,aria-describedby connects input to error
+Forms,aria-invalid set when error present,pass,pass,aria-invalid=true on invalid input
+Forms,Error suggestions provided,pass,pass,Message includes how to fix
+Forms,Error summary receives focus (No-JS),n/a,pass,Auto-focus script moves focus to summary
+No-JS,All tasks completable with JS disabled,n/a,pass,Add edit delete filter all work
+No-JS,Success message displayed after add,n/a,pass,msg=task_added shows green banner
+No-JS,Success message displayed after edit,n/a,pass,msg=task_updated shows green banner
+No-JS,Success message displayed after delete,n/a,pass,msg=task_deleted shows green banner
+No-JS,Error summary focusable and keyboard-navigable,n/a,pass,tabindex=-1 allows focus; link navigates to input
+No-JS,PRG pattern working (refresh doesn't duplicate),n/a,pass,303 redirect prevents resubmission
+No-JS,Full page renders correctly,n/a,pass,All content visible without JS
+Visual,Contrast meets WCAG AA (4.5:1 text),pass,pass,Success message 7.2:1; error message 5.8:1
+Visual,200% zoom no horizontal scroll,pass,pass,Content reflows correctly
+Visual,Error messages visible (not colour-only),pass,pass,Text + border + background indicate error
+Visual,Focus indicators meet contrast requirements,pass,pass,Blue outline 3:1 against white background
+Visual,Success message prominent and visible,pass,pass,Green background bold text larger font
+

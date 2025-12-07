@@ -1,0 +1,14 @@
+task_code,js_mode,n_success,median_ms,mad_ms,completion_rate,error_rate
+T1_filter,on,4,2207,494,1.00,0.00
+T1_filter,off,1,3456,0,1.00,0.00
+T1_filter,all,5,2567,720,1.00,0.00
+T2_edit,on,4,2301,445,1.00,0.20
+T2_edit,off,1,4567,0,1.00,0.50
+T2_edit,all,5,2456,889,1.00,0.29
+T3_add,on,4,678,167,1.00,0.00
+T3_add,off,1,2134,0,1.00,0.00
+T3_add,all,5,789,445,1.00,0.00
+T4_delete,on,4,423,123,1.00,0.00
+T4_delete,off,1,1678,0,1.00,0.00
+T4_delete,all,5,534,222,1.00,0.00
+

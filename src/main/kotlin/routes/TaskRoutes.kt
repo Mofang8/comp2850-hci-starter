@@ -223,7 +223,8 @@ fun Route.taskRoutes() {
                     <div id="status"
                          hx-swap-oob="true"
                          role="status"
-                         aria-live="polite">
+                         aria-live="polite"
+                         class="success">
                         Task added successfully.
                     </div>
                     """.trimIndent()
@@ -231,8 +232,9 @@ fun Route.taskRoutes() {
                 return@timed call.respondText(listHtml + pagerHtml + statusHtml, ContentType.Text.Html)
             }
 
-            // No-JS: POST-Redirect-GET pattern (303 See Other)
-            call.response.headers.append("Location", "/tasks")
+            // No-JS: POST-Redirect-GET pattern with success message (303 See Other)
+            // Week 10 Fix (wk9-01): Add success feedback for No-JS users
+            call.response.headers.append("Location", "/tasks?msg=task_added")
             call.respond(HttpStatusCode.SeeOther)
         }
     }
@@ -292,8 +294,9 @@ fun Route.taskRoutes() {
             val removed = id?.let { TaskRepository.delete(it) } ?: false
 
             // For now we accept that there is no confirmation in no-JS mode (documented trade-off).
-            // POST-Redirect-GET pattern (303 See Other)
-            call.response.headers.append("Location", "/tasks")
+            // POST-Redirect-GET pattern with success message (303 See Other)
+            // Week 10 Fix: Add success feedback for No-JS users (consistency)
+            call.response.headers.append("Location", "/tasks?msg=task_deleted")
             call.respond(HttpStatusCode.SeeOther)
         }
     }
@@ -383,12 +386,14 @@ fun Route.taskRoutes() {
             if (call.isHtmxRequest()) {
                 val viewHtml = call.renderTemplate("tasks/partials/view.peb", mapOf("task" to task))
 
+                // Week 10 Fix (wk9-02): Enhanced status message with success class for better visibility
                 val status =
                     """
                     <div id="status"
                          hx-swap-oob="true"
                          role="status"
-                         aria-live="polite">
+                         aria-live="polite"
+                         class="success">
                         Task "${task.title}" updated successfully.
                     </div>
                     """.trimIndent()
@@ -396,7 +401,9 @@ fun Route.taskRoutes() {
                 return@timed call.respondText(viewHtml + status, ContentType.Text.Html)
             }
 
-            call.response.headers.append("Location", "/tasks")
+            // No-JS: POST-Redirect-GET pattern with success message
+            // Week 10 Fix (wk9-01): Add success feedback for No-JS users
+            call.response.headers.append("Location", "/tasks?msg=task_updated")
             call.respond(HttpStatusCode.SeeOther)
         }
     }

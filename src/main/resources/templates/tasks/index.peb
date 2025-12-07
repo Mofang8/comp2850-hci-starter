@@ -3,10 +3,26 @@
 {% block content %}
 <h1>Tasks</h1>
 
+{# Week 10 Fix (wk9-01): Success message for No-JS users after add/edit/delete #}
+{% if msg is not empty %}
+<div role="status"
+     aria-live="polite"
+     class="success-message"
+     id="success-message">
+  {% if msg == "task_added" %}
+  Task added successfully.
+  {% elseif msg == "task_updated" %}
+  Task updated successfully.
+  {% elseif msg == "task_deleted" %}
+  Task deleted successfully.
+  {% endif %}
+</div>
+{% endif %}
+
 <section aria-labelledby="add-heading">
   <h2 id="add-heading">Add a new task</h2>
 
-  {# Error summary for no-JS validation errors (WCAG 3.3.1, 3.3.3) #}
+  {# Week 10 Fix (wk9-03): Error summary for no-JS validation errors with focus management (WCAG 3.3.1, 2.4.3, 4.1.3) #}
   {% if error is not empty %}
   <div role="alert"
        aria-live="assertive"
@@ -28,6 +44,15 @@
       {% endif %}
     </ul>
   </div>
+  {# Week 10 Fix (wk9-03): Auto-focus error summary for keyboard/SR users (progressive enhancement) #}
+  <script>
+    (function() {
+      var errorSummary = document.getElementById('error-summary');
+      if (errorSummary) {
+        errorSummary.focus();
+      }
+    })();
+  </script>
   {% endif %}
 
   <form action="/tasks" method="post"
