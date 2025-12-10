@@ -1,7 +1,7 @@
 # COMP2850 HCI — Week 10 Assessment Submission
 
 **Student**: [Tianqi Wang]  
-**Date**: 2025-12-04  
+**Date**: 2025-12-05
 **Module**: COMP2850 Human-Computer Interaction
 
 ---
@@ -116,5 +116,5 @@ All files reference each other for full traceability.
 
 ---
 
-_Last updated: 2025-12-04_
+_Last updated: 2025-12-05_
 

@@ -2,7 +2,7 @@
 
 **Module**: COMP2850 HCI
 **Week**: 10 Lab 2
-**Student**: [Your Name]
+**Student**: [Tianqi Wang]
 **Date**: [YYYY-MM-DD]
 **Fixes Tested**: [List commit hashes]
 

@@ -283,7 +283,7 @@ See [Glossary](../../references/glossary.md) for full definitions.
 
 ---
 
-**Author**: [Your name]
+**Author**: [Tianqi Wang]
 **Date**: [YYYY-MM-DD]
 **Version**: Draft for Task 1 submission
 **Next review**: Week 11 (finalize for portfolio)

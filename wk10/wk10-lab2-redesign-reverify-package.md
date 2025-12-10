@@ -697,7 +697,7 @@ wk10/assessment/05-evidence/
 ```markdown
 # COMP2850 HCI — assessment Submission
 
-**Student**: [Your name]
+**Student**: [Tianqi Wang]
 **Date**: 2025-10-22
 **Module**: COMP2850 HCI
 

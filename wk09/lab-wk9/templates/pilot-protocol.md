@@ -4,7 +4,7 @@
 **Week**: 9
 **Pilot ID**: [e.g., P1, P2, P3, P4]
 **Date**: [YYYY-MM-DD]
-**Researcher**: [Your Name]
+**Researcher**: [Tianqi Wang]
 
 ---
 

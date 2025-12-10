@@ -649,7 +649,7 @@ wk9-04,"No-JS delete has no confirmation",T4_delete,"No-JS participants can't co
 
 **Target**: Validation errors not announced by screen readers (wk9-01, wk9-03)
 **Priority**: 1 (Score: 8)
-**Assignee**: [Your name]
+**Assignee**: [Tianqi Wang]
 **Date**: 2025-10-20
 
 ---

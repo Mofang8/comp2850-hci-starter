@@ -240,7 +240,7 @@ For each task, record:
 **Module**: COMP2850 HCI
 **Activity**: Task-based usability pilots
 **Date**: [YYYY-MM-DD]
-**Researcher**: [Your Name]
+**Researcher**: [Tianqi Wang]
 
 ---
 

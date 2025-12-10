@@ -2,7 +2,7 @@
 
 **Module**: COMP2850 Human-Computer Interaction  
 **Student**: [Tianqi Wang]  
-**Date**: 2025-12-04
+**Date**: 2025-11-22
 
 ---
 
@@ -252,4 +252,4 @@ The server-first architecture with progressive enhancement proved effective: fix
 
 ---
 
-_Last updated: 2025-12-04_
+_Last updated: 2025-11-22_

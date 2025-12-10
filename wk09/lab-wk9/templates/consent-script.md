@@ -2,7 +2,7 @@
 
 **Module**: COMP2850 Human-Computer Interaction
 **Activity**: Peer pilot evaluation (Week 9)
-**Researcher**: [Your Name]
+**Researcher**: [Tianqi Wang]
 **Date**: [YYYY-MM-DD]
 
 ---

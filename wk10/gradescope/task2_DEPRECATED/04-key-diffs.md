@@ -354,6 +354,6 @@ Related: WCAG 4.1.3 (Status Messages AA), 3.3.1 (Error Identification A)
 
 ---
 
-**Author**: [Your name]
-**Date**: [YYYY-MM-DD]
+**Author**: [Tianqi Wang]
+**Date**: [2025-12-05]
 **Related files**: `01-redesign-brief.md`, `02-a11y-regression-checklist.csv`, `03-before-after-summary.md`

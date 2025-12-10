@@ -3,7 +3,7 @@
 **Target**: Accessible Feedback for No-JS and All Users (wk9-01, wk9-02, wk9-03)  
 **Priority**: 1 (Combined Score: 21)  
 **Assignee**: [Tianqi Wang]  
-**Date**: 2025-12-04
+**Date**: 2025-11-23
 
 ---
 
@@ -299,4 +299,4 @@ wk9-01,...,fixed,"wk10/evidence/reverification.md; wk10/assessment/05-evidence/s
 
 ---
 
-_Last updated: 2025-12-04_
+_Last updated: 2025-11-23_

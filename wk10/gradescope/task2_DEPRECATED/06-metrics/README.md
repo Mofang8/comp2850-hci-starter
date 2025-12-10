@@ -220,6 +220,6 @@ Before submitting Task 2:
 
 ---
 
-**Author**: [Your name]
-**Last updated**: [YYYY-MM-DD]
+**Author**: [Tianqi Wang]
+**Last updated**: [2025-11-23]
 **Related files**: `01-redesign-brief.md`, `03-before-after-summary.md`, `05-findings.md` (Week 9)

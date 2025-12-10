@@ -1,6 +1,6 @@
 # Data Recording Notes — Week 9
 
-**Study Period**: 2025-12-02 to 2025-12-04  
+**Study Period**: 2025-11-17 to 2025-11-22  
 **Data Files**: `data/metrics.csv`, `wk09/data/pilot-notes.md`
 
 ---

@@ -2,7 +2,7 @@
 
 **Module**: COMP2850 HCI
 **Week**: 10 Lab 1
-**Student**: [Your Name]
+**Student**: [Tianqi Wang]
 **Date**: [YYYY-MM-DD]
 
 ---

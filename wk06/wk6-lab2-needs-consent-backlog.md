@@ -211,7 +211,7 @@ Edit `wk06/research/consent-protocol.md`:
 **Module**: COMP2850 Human-Computer Interaction
 **Activity**: Low-risk needs-finding (peer interviews)
 **Date**: [YYYY-MM-DD]
-**Researcher**: [Your Name/Student ID]
+**Researcher**: [Tianqi Wang]
 
 ---
 
@@ -276,8 +276,8 @@ If you change your mind after the interview:
 
 ## Contact
 
-**Researcher**: [Your Name], [your-email@leeds.ac.uk]
-**Module Lead**: Dr. [Name], [module-email]
+**Researcher**: [Tianqi Wang], [sc232tw@leeds.ac.uk]
+**Module Lead**: Dr. [Brooks], [J.Brooks2@leeds.ac.uk]
 **University Ethics**: Research Ethics, ethics@leeds.ac.uk
 
 ---

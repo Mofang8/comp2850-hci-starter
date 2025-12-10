@@ -3,8 +3,8 @@
 > **📥 Download this template**: [COMP2850-submission-template.md](/downloads/COMP2850-submission-template.md)
 > Right-click the link above and select "Save link as..." to download the template file.
 
-**Student**: [Your name and student ID]
-**Submission date**: [DD/MM/YYYY]
+**Student**: [Tianqi Wang 201778814]
+**Submission date**: [09/12/2025]
 **Academic Year**: 2025-26
 
 ---

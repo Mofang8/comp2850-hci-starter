@@ -530,7 +530,7 @@ Your main `README.md` should provide a **portfolio navigation guide**. Example:
 ```markdown
 # COMP2850 HCI: Task Manager with Privacy by Design
 
-**Student**: [Your Name]
+**Student**: [Tianqi Wang]
 **Module**: COMP2850 Human-Computer Interaction, University of Leeds
 **Academic Year**: 2024/25
 

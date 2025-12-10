@@ -75,5 +75,5 @@ Browser inspector shows `<span class="error">Title is required</span>` without `
 
 ---
 
-**Author**: [Your name]
+**Author**: [Tianqi Wang]
 **Last updated**: [YYYY-MM-DD]

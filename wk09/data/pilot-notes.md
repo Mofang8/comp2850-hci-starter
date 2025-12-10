@@ -1,6 +1,6 @@
 # Pilot Data — Week 9 (Lab 2)
 
-**Study Period**: 2025-12-02 to 2025-12-04  
+**Study Period**: 2025-11-17 to 2025-11-22  
 **Total Participants**: 5 (3 HTMX standard, 1 keyboard-only, 1 no-JS)  
 **Facilitator**: Student researcher  
 **Data Sources**: Server logs (`data/metrics.csv`) + manual observations below
@@ -10,7 +10,7 @@
 ## Participant P1
 
 **Mode**: HTMX (standard, mouse + keyboard)  
-**Date**: 2025-12-02 14:15  
+**Date**: 2025-11-17 14:15  
 **Session ID**: `P1_7a9f`  
 **Consent**: ✅ Verbal consent confirmed  
 **Duration**: 16 minutes
@@ -97,7 +97,7 @@
 ## Participant P2
 
 **Mode**: HTMX (standard, mouse)  
-**Date**: 2025-12-02 15:00  
+**Date**: 2025-11-19 15:00  
 **Session ID**: `P2_b3c8`  
 **Consent**: ✅ Verbal consent confirmed  
 **Duration**: 19 minutes
@@ -182,7 +182,7 @@
 ## Participant P3
 
 **Mode**: Keyboard-only (Tab, Enter, Space only; JS enabled)  
-**Date**: 2025-12-03 10:30  
+**Date**: 2025-11-20 10:30  
 **Session ID**: `P3_d4e9`  
 **Consent**: ✅ Verbal consent confirmed  
 **Duration**: 22 minutes
@@ -273,7 +273,7 @@
 ## Participant P4
 
 **Mode**: No-JS (JavaScript disabled in browser)  
-**Date**: 2025-12-03 14:00  
+**Date**: 2025-11-21 14:00  
 **Session ID**: `P4_f5a2`  
 **Consent**: ✅ Verbal consent confirmed  
 **Duration**: 25 minutes
@@ -370,7 +370,7 @@
 ## Participant P5
 
 **Mode**: HTMX (standard, mouse + keyboard)  
-**Date**: 2025-12-04 11:00  
+**Date**: 2025-11-22 11:00  
 **Session ID**: `P5_c7d1`  
 **Consent**: ✅ Verbal consent confirmed  
 **Duration**: 15 minutes

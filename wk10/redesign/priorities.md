@@ -2,7 +2,7 @@
 
 **Module**: COMP2850 Human-Computer Interaction  
 **Student**: [Tianqi Wang]  
-**Date**: 2025-12-04
+**Date**: 2025-11-23
 
 ---
 
@@ -293,5 +293,5 @@ After implementing fixes, re-verify with:
 
 ---
 
-_Last updated: 2025-12-04_
+_Last updated: 2025-11-23_
 

@@ -1,6 +1,6 @@
 # Pilot Findings Analysis — Week 9
 
-**Study Period**: 2025-12-02 to 2025-12-04  
+**Study Period**: 2025-11-17 to 2025-11-22  
 **Module**: COMP2850 Human-Computer Interaction
 
 ---
@@ -11,7 +11,7 @@
   - 3 × HTMX (standard mouse + keyboard)
   - 1 × Keyboard-only (JS enabled)
   - 1 × No-JS (JavaScript disabled)
-- **Date range**: 2025-12-02 to 2025-12-04
+- **Date range**: 2025-11-17 to 2025-11-22
 - **Data sources**:
   - Automated logs: `data/metrics.csv`
   - Qualitative notes: `wk09/data/pilot-notes.md`

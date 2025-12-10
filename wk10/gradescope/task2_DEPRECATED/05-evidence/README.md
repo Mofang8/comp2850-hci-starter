@@ -303,6 +303,5 @@ Before submitting Task 2 to Gradescope:
 
 ---
 
-**Author**: [Your name]
-**Last updated**: [YYYY-MM-DD]
+**Author**: [Tianqi Wang]
 **Related files**: `01-redesign-brief.md`, `03-before-after-summary.md`, `04-key-diffs.md`

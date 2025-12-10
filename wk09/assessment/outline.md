@@ -1,7 +1,7 @@
 # Assessment Draft — Week 9 (Task 1)
 
 **Module**: COMP2850 Human-Computer Interaction  
-**Study Period**: 2025-12-02 to 2025-12-04  
+**Study Period**: 2025-11-17 to 2025-11-22  
 **Author**: Student Researcher
 
 ---

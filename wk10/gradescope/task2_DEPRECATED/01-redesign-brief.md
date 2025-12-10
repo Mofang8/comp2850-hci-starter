@@ -1,8 +1,8 @@
 # Redesign Brief — Task 2: Inclusive Redesign
 
-**Author**: [Your name]
-**Date**: [YYYY-MM-DD]
-**Version**: [Draft / Final]
+**Author**: [Tianqi Wang]
+**Date**: [2025-12-5]
+**Version**: [Final]
 
 ---
 
@@ -290,5 +290,5 @@ call.respondRedirect("/tasks/${id}/edit?error=blank_title&focus=error-summary")
 
 ---
 
-**Status**: [Draft / Ready for implementation / Implementation complete / Verified]
+**Status**: [Verified]
 **Next steps**: [What needs to happen next?]

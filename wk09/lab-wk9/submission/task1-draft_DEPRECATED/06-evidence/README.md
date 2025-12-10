@@ -276,6 +276,6 @@ Before submitting Task 1 to Gradescope:
 
 ---
 
-**Author**: [Your name]
+**Author**: [Tianqi Wang]
 **Last updated**: [YYYY-MM-DD]
 **Related files**: `05-findings.md`, `04-results.csv`, `backlog/backlog.csv`

@@ -1,7 +1,7 @@
 # Consent Log — Week 9 Peer Pilots
 
 **Study**: COMP2850 Task Manager Usability Evaluation  
-**Period**: 2025-12-02 to 2025-12-04  
+**Period**: 2025-11-17 to 2025-11-22
 **Facilitator**: Student Researcher
 
 > **Privacy Note**: This log contains only anonymous participant codes and session IDs.  
@@ -11,7 +11,7 @@
 
 ## Pilot 1
 
-**Date**: 2025-12-02  
+**Date**: 2025-11-17  
 **Time**: 14:15  
 **Participant code**: P1  
 **Session ID**: `P1_7a9f`  
@@ -23,7 +23,7 @@
 
 ## Pilot 2
 
-**Date**: 2025-12-02  
+**Date**: 2025-11-19  
 **Time**: 15:00  
 **Participant code**: P2  
 **Session ID**: `P2_b3c8`  
@@ -35,7 +35,7 @@
 
 ## Pilot 3
 
-**Date**: 2025-12-03  
+**Date**: 2025-11-20  
 **Time**: 10:30  
 **Participant code**: P3  
 **Session ID**: `P3_d4e9`  
@@ -47,7 +47,7 @@
 
 ## Pilot 4
 
-**Date**: 2025-12-03  
+**Date**: 2025-11-21  
 **Time**: 14:00  
 **Participant code**: P4  
 **Session ID**: `P4_f5a2`  
@@ -59,7 +59,7 @@
 
 ## Pilot 5
 
-**Date**: 2025-12-04  
+**Date**: 2025-11-22  
 **Time**: 11:00  
 **Participant code**: P5  
 **Session ID**: `P5_c7d1`  
@@ -73,11 +73,11 @@
 
 | Code | Session ID | Variant         | Date       | Consent |
 | ---- | ---------- | --------------- | ---------- | ------- |
-| P1   | `P1_7a9f`  | HTMX (standard) | 2025-12-02 | ✅      |
-| P2   | `P2_b3c8`  | HTMX (standard) | 2025-12-02 | ✅      |
-| P3   | `P3_d4e9`  | Keyboard-only   | 2025-12-03 | ✅      |
-| P4   | `P4_f5a2`  | No-JS           | 2025-12-03 | ✅      |
-| P5   | `P5_c7d1`  | HTMX (standard) | 2025-12-04 | ✅      |
+| P1   | `P1_7a9f`  | HTMX (standard) | 2025-11-17 | ✅      |
+| P2   | `P2_b3c8`  | HTMX (standard) | 2025-11-19 | ✅      |
+| P3   | `P3_d4e9`  | Keyboard-only   | 2025-11-20 | ✅      |
+| P4   | `P4_f5a2`  | No-JS           | 2025-11-21 | ✅      |
+| P5   | `P5_c7d1`  | HTMX (standard) | 2025-11-22 | ✅      |
 
 **Total participants**: 5  
 **All consents obtained**: Yes  
@@ -87,7 +87,7 @@
 
 ## Deletion Requests
 
-_No deletion requests received as of 2025-12-04._
+_No deletion requests received as of 2025-11-22._
 
 If a participant requests data deletion in the future:
 

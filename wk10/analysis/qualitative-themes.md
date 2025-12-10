@@ -1,9 +1,9 @@
 # Qualitative Themes — Week 10
 
 **Study**: Peer pilots (n=5)  
-**Period**: 2025-12-02 to 2025-12-04  
+**Period**: 2025-11-17 to 2025-11-22  
 **Data Source**: `wk09/data/pilot-notes.md`  
-**Analysis Date**: 2025-12-04
+**Analysis Date**: 2025-11-22
 
 ---
 
@@ -278,4 +278,4 @@ Consider announcing deletion and new focus location via `aria-live` region:
 
 ---
 
-_Last updated: 2025-12-04_
+_Last updated: 2025-11-22_

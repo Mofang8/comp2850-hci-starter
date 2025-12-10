@@ -116,5 +116,5 @@ This means:
 
 ---
 
-**Author**: [Your name]
-**Last updated**: [YYYY-MM-DD]
+**Author**: [Tianqi Wang]
+**Last updated**: [2025-12-4]

@@ -1,9 +1,9 @@
 # Quantitative Analysis — Week 10
 
 **Study**: Peer pilots (n=5)  
-**Period**: 2025-12-02 to 2025-12-04  
+**Period**: 2025-11-17 to 2025-11-22  
 **Data Source**: `data/metrics.csv`  
-**Analysis Date**: 2025-12-04
+**Analysis Date**: 2025-11-22
 
 ---
 
@@ -176,4 +176,4 @@ High MAD often signals **inclusion barriers**—certain users face obstacles tha
 
 ---
 
-_Last updated: 2025-12-04_
+_Last updated: 2025-11-22_
