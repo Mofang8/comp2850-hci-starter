@@ -43,6 +43,7 @@ import utils.Page
 data class Task(
     val id: Int,
     var title: String,
+    var completed: Boolean = false,
 )
 
 /**
@@ -62,10 +63,16 @@ object TaskRepository {
             file.writeText("id,title\n")
         } else {
             file.readLines().drop(1).forEach { line ->
-                val parts = line.split(",", limit = 2)
-                if (parts.size == 2) {
+                val parts = line.split(",", limit = 3)
+                if (parts.size >= 2) {
                     val id = parts[0].toIntOrNull() ?: return@forEach
-                    tasks.add(Task(id, parts[1]))
+                    val title = parts[1]
+                    val completed =
+                        when {
+                            parts.size >= 3 -> parts[2].equals("true", ignoreCase = true)
+                            else -> false
+                        }
+                    tasks.add(Task(id, title, completed))
                     idCounter.set(maxOf(idCounter.get(), id + 1))
                 }
             }
@@ -137,11 +144,21 @@ object TaskRepository {
     fun find(id: Int): Task? = tasks.find { it.id == id }
 
     fun update(task: Task) {
-        tasks.find { it.id == task.id }?.let { it.title = task.title }
+        tasks.find { it.id == task.id }?.let {
+            it.title = task.title
+            it.completed = task.completed
+        }
         persist()
     }
 
+    fun toggle(id: Int): Task? {
+        val task = tasks.find { it.id == id } ?: return null
+        task.completed = !task.completed
+        persist()
+        return task
+    }
+
     private fun persist() {
-        file.writeText("id,title\n" + tasks.joinToString("\n") { "${it.id},${it.title}" })
+        file.writeText("id,title,completed\n" + tasks.joinToString("\n") { "${it.id},${it.title},${it.completed}" })
     }
 }

@@ -34,7 +34,7 @@ suspend fun ApplicationCall.timed(
     block: suspend ApplicationCall.() -> Unit,
 ) {
     val start = System.currentTimeMillis()
-    val sessionId = request.cookies["sid"] ?: "anon"
+    val sessionId = ensureSession().id
     val reqId = attributes.getOrNull(RequestIdKey) ?: newReqId()
 
     try {

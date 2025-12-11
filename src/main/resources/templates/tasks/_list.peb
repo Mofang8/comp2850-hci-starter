@@ -1,6 +1,6 @@
 <section aria-labelledby="list-heading">
   <h2 id="list-heading">Current tasks ({{ page.totalItems }})</h2>
-  <ul id="task-list" class="task-list" aria-describedby="result-count">
+<ul id="task-list" class="task-list" aria-describedby="result-count">
     {% for task in page.items %}
       {% if editingId and editingId == task.id %}
         {% include "tasks/partials/edit.peb" with {"task": task, "error": errorMessage} %}

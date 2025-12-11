@@ -1,21 +1,22 @@
 package routes
 
 import data.TaskRepository
-import io.ktor.http.*
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.encodeURLParameter
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.pebbletemplates.pebble.PebbleEngine
-import java.io.StringWriter
+import isHtmxRequest
+import renderTemplate
 import utils.Logger
 import utils.Page
 import utils.RequestIdKey
+import utils.ensureSession
 import utils.jsMode
 import utils.newReqId
 import utils.timed
-import isHtmxRequest
-import renderTemplate
 
 /**
  * NOTE FOR NON-INTELLIJ IDEs (VSCode, Eclipse, etc.):
@@ -54,15 +55,6 @@ import renderTemplate
  */
 
 fun Route.taskRoutes() {
-    val pebble =
-        PebbleEngine
-            .Builder()
-            .loader(
-                io.pebbletemplates.pebble.loader.ClasspathLoader().apply {
-                    prefix = "templates/"
-                },
-            ).build()
-
     /**
      * GET /tasks - List tasks with optional filtering and pagination.
      *
@@ -141,9 +133,10 @@ fun Route.taskRoutes() {
         val reqId = newReqId()
         call.attributes.put(RequestIdKey, reqId)
         val jsMode = call.jsMode()
-        val sessionId = call.request.cookies["sid"] ?: "anon"
 
         call.timed(taskCode = "T3_add", jsMode = jsMode) {
+            val session = call.ensureSession()
+            val sessionId = session.id
             val title = call.receiveParameters()["title"].orEmpty().trim()
 
             // Server-side validation: always validate on server for both HTMX and no-JS paths.
@@ -268,9 +261,19 @@ fun Route.taskRoutes() {
                 <div id="status"
                      hx-swap-oob="true"
                      role="status"
-                     aria-live="polite">
+                     aria-live="polite"
+                     class="success">
                     $message
                 </div>
+                <script hx-swap-oob="true">
+                    (function() {
+                        // Return focus to the add-task input after deletion for keyboard users.
+                        var titleInput = document.getElementById('title');
+                        if (titleInput) {
+                            titleInput.focus();
+                        }
+                    })();
+                </script>
                 """.trimIndent()
 
             // Empty body for the element itself; OOB status updates the live region.
@@ -302,6 +305,50 @@ fun Route.taskRoutes() {
     }
 
     /**
+     * POST /tasks/{id}/toggle - Toggle completion (HTMX + no-JS)
+     */
+    post("/tasks/{id}/toggle") {
+        val id = call.parameters["id"]?.toIntOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
+
+        val reqId = newReqId()
+        call.attributes.put(RequestIdKey, reqId)
+        val jsMode = call.jsMode()
+        val session = call.ensureSession()
+        val sessionId = session.id
+
+        call.timed(taskCode = "T5_toggle", jsMode = jsMode) {
+            val updated = TaskRepository.toggle(id) ?: return@timed call.respond(HttpStatusCode.NotFound)
+
+            val statusText =
+                if (updated.completed) {
+                    """Task "${updated.title}" marked complete."""
+                } else {
+                    """Task "${updated.title}" marked to do."""
+                }
+
+            if (call.isHtmxRequest()) {
+                val viewHtml = call.renderTemplate("tasks/partials/view.peb", mapOf("task" to updated))
+                val status =
+                    """
+                    <div id="status"
+                         hx-swap-oob="true"
+                         role="status"
+                         aria-live="polite"
+                         class="success">
+                        $statusText
+                    </div>
+                    """.trimIndent()
+                return@timed call.respondText(viewHtml + status, ContentType.Text.Html)
+            }
+
+            // No-JS: POST-Redirect-GET with success message
+            val msg = if (updated.completed) "task_completed" else "task_reopened"
+            call.response.headers.append("Location", "/tasks?msg=$msg")
+            call.respond(HttpStatusCode.SeeOther)
+        }
+    }
+
+    /**
      * GET /tasks/{id}/edit - Show edit form
      */
     get("/tasks/{id}/edit") {
@@ -315,11 +362,12 @@ fun Route.taskRoutes() {
         }
 
         if (call.isHtmxRequest()) {
-            val template = pebble.getTemplate("tasks/partials/edit.peb")
-            val model = mapOf("task" to task, "error" to errorMessage)
-            val writer = StringWriter()
-            template.evaluate(writer, model)
-            call.respondText(writer.toString(), ContentType.Text.Html)
+            val html =
+                call.renderTemplate(
+                    "tasks/partials/edit.peb",
+                    mapOf("task" to task, "error" to errorMessage),
+                )
+            call.respondText(html, ContentType.Text.Html)
         } else {
             // No-JS: render full page with the selected task in edit mode.
             val allTasks = TaskRepository.all()
@@ -357,7 +405,8 @@ fun Route.taskRoutes() {
         val reqId = newReqId()
         call.attributes.put(RequestIdKey, reqId)
         val jsMode = call.jsMode()
-        val sessionId = call.request.cookies["sid"] ?: "anon"
+        val session = call.ensureSession()
+        val sessionId = session.id
 
         call.timed(taskCode = "T2_edit", jsMode = jsMode) {
             val newTitle = call.receiveParameters()["title"].orEmpty().trim()

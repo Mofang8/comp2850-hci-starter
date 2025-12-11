@@ -1,9 +1,20 @@
-<li id="task-{{ task.id }}" class="task-item task-view">
+<li id="task-{{ task.id }}" class="task-item task-view{% if task.completed %} completed{% endif %}">
   <div class="task-content">
     <span class="task-title">{{ task.title }}</span>
   </div>
 
   <div class="task-actions">
+    <form action="/tasks/{{ task.id }}/toggle"
+          method="post"
+          hx-post="/tasks/{{ task.id }}/toggle"
+          hx-target="#task-{{ task.id }}"
+          hx-swap="outerHTML">
+      <button type="submit"
+              aria-label="{% if task.completed %}Mark task '{{ task.title }}' as to do{% else %}Mark task '{{ task.title }}' as done{% endif %}">
+        {% if task.completed %}Mark to do{% else %}Mark done{% endif %}
+      </button>
+    </form>
+
     <form action="/tasks/{{ task.id }}/edit" method="get"
           hx-get="/tasks/{{ task.id }}/edit"
           hx-target="#task-{{ task.id }}"

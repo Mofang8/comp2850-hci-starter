@@ -15,6 +15,10 @@
   Task updated successfully.
   {% elseif msg == "task_deleted" %}
   Task deleted successfully.
+  {% elseif msg == "task_completed" %}
+  Task marked complete.
+  {% elseif msg == "task_reopened" %}
+  Task marked to do.
   {% endif %}
 </div>
 {% endif %}

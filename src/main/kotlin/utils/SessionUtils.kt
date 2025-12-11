@@ -1,5 +1,7 @@
 package utils
 
+import io.ktor.server.application.*
+import io.ktor.server.sessions.*
 import java.util.UUID
 
 /**
@@ -45,3 +47,17 @@ fun shortSessionId(fullId: String): String = fullId.take(6)
  * @return Request ID string
  */
 fun generateRequestId(): String = "r_${UUID.randomUUID().toString().take(8)}"
+
+/**
+ * Ensure the caller has a session; create one if missing.
+ *
+ * This keeps session handling consistent for logging and parity across routes.
+ */
+fun ApplicationCall.ensureSession(): SessionData {
+    val existing = sessions.get<SessionData>()
+    if (existing != null) return existing
+
+    val fresh = SessionData()
+    sessions.set(fresh)
+    return fresh
+}
