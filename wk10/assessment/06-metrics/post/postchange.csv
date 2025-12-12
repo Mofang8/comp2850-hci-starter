@@ -1,0 +1,7 @@
+ts_iso,session_id,task_code,js_mode,time_ms,errors,confidence,notes
+2025-12-11T10:00:00Z,P6_post,T3_add,off,1780,0,5,"No-JS: success banner visible immediately"
+2025-12-11T10:05:00Z,P6_post,T2_edit,off,2985,0,4,"No-JS: error summary focuses on blank attempt; success banner after save"
+2025-12-11T10:12:00Z,P6_post,T1_filter,off,2520,0,4,"No-JS: full-page reload, result count clear"
+2025-12-11T10:18:00Z,P7_post,T3_add,on,640,0,5,"HTMX: status announced via role=status"
+2025-12-11T10:20:00Z,P7_post,T2_edit,on,2050,0,4.5,"HTMX: prominent green status after save"
+2025-12-11T10:23:00Z,P7_post,T4_delete,on,410,0,5,"HTMX: status confirms delete; focus return OK"

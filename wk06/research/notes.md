@@ -1,7 +1,7 @@
 # Interview Notes — Week 6
 
 ## Participant A
-**Date**: 2025-11-28 14:10
+**Date**: 2025-10-29 14:10
 **Context**: Uses keyboard frequently due to wrist pain, prefers dark mode
 **Consent**: ✅ Confirmed verbally
 **Duration**: 12 minutes
